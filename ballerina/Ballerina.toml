@@ -1,11 +1,11 @@
 [package]
-distribution = "2201.11.0-20241117-133400-a3054b77"
+distribution = "2201.11.0"
 org = "ballerinax"
 name = "asb"
-version = "3.9.1"
+version = "3.9.2-SNAPSHOT"
 license= ["Apache-2.0"]
 authors = ["Ballerina"]
-keywords = ["IT Operations/Message Brokers", "Cost/Paid", "Vendor/Microsoft"]
+keywords = ["IT Operations/Message Brokers", "Cost/Paid", "Vendor/Microsoft", "Area/Messaging", "Type/Connector", "Type/Trigger"]
 icon = "icon.png"
 repository = "https://github.com/ballerina-platform/module-ballerinax-azure-service-bus"
 
@@ -19,8 +19,8 @@ graalvmCompatible = true
 groupId = "org.ballerinax"
 artifactId = "asb-native"
 module = "asb-native" 
-version = "3.9.1"
-path = "../native/build/libs/asb-native-3.9.1.jar"
+version = "3.9.2-SNAPSHOT"
+path = "../native/build/libs/asb-native-3.9.2-SNAPSHOT.jar"
 
 [[platform.java21.dependency]]
 groupId = "com.fasterxml.jackson.core"
