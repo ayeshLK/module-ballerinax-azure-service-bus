@@ -5,8 +5,15 @@ provides the capability to send and receive messages from Service Bus queues, to
 Service Bus handles messages that include data representing any kind of information, including structured data encoded
 with common formats such as the following ones: JSON, XML, and Plain Text.
 
-The [Ballerina](https://ballerina.io/) connector for Azure Service Bus allows you to connect to
-an [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/) via the Ballerina language.
+The Azure Service Bus connector allows you to connect to
+an [Azure Service Bus](https://docs.microsoft.com/en-us/azure/service-bus-messaging/) for enterprise messaging.
+
+### Key Features
+
+- Send and receive messages from queues, topics, and subscriptions
+- Manage queues, topics, subscriptions, and rules via Admin Client
+- Event-driven message processing with listener support
+- Support for structured data in JSON, XML, and Plain Text formats
 
 This connector supports the following operations:
 - Manage (Get/Create/Update/Delete/list) a queue, topic, subscription or rule.
