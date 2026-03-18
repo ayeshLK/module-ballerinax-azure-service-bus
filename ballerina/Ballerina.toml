@@ -2,7 +2,7 @@
 distribution = "2201.8.0"
 org = "ballerinax"
 name = "asb"
-version = "3.8.3"
+version = "3.8.4-SNAPSHOT"
 license= ["Apache-2.0"]
 authors = ["Ballerina"]
 keywords = ["IT Operations/Message Brokers", "Cost/Paid", "Vendor/Microsoft"]
@@ -19,15 +19,15 @@ graalvmCompatible = true
 groupId = "org.ballerinax"
 artifactId = "asb-native"
 module = "asb-native" 
-version = "3.8.3"
-path = "../native/build/libs/asb-native-3.8.3.jar"
+version = "3.8.4-SNAPSHOT"
+path = "../native/build/libs/asb-native-3.8.4-SNAPSHOT.jar"
 
 # Azure dependencies
 [[platform.java17.dependency]]
 groupId = "com.azure"
 artifactId = "azure-messaging-servicebus"
-version = "7.14.3"
-path = "./lib/azure-messaging-servicebus-7.14.3.jar"
+version = "7.17.17"
+path = "./lib/azure-messaging-servicebus-7.17.17.jar"
 
 [[platform.java17.dependency]]
 groupId = "com.azure"
