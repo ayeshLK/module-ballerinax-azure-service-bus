@@ -66,31 +66,31 @@ version = "1.2.4"
 path = "./lib/qpid-proton-j-extensions-1.2.4.jar"
 
 # Jackson dependencies
-[[platform.java21.dependency]]
+[[platform.java17.dependency]]
 groupId = "com.fasterxml.jackson.core"
 artifactId = "jackson-annotations"
 version = "2.21"
 path = "./lib/jackson-annotations-2.21.jar"
 
-[[platform.java21.dependency]]
+[[platform.java17.dependency]]
 groupId = "com.fasterxml.jackson.core"
 artifactId = "jackson-core"
 version = "2.21.1"
 path = "./lib/jackson-core-2.21.1.jar"
 
-[[platform.java21.dependency]]
+[[platform.java17.dependency]]
 groupId = "com.fasterxml.jackson.core"
 artifactId = "jackson-databind"
 version = "2.21.1"
 path = "./lib/jackson-databind-2.21.1.jar"
 
-[[platform.java21.dependency]]
+[[platform.java17.dependency]]
 groupId = "com.fasterxml.jackson.datatype"
 artifactId = "jackson-datatype-jsr310"
 version = "2.21.1"
 path = "./lib/jackson-datatype-jsr310-2.21.1.jar"
 
-[[platform.java21.dependency]]
+[[platform.java17.dependency]]
 groupId = "com.fasterxml.jackson.dataformat"
 artifactId = "jackson-dataformat-xml"
 version = "2.21.1"
