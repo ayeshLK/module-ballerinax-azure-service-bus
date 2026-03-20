@@ -75,8 +75,8 @@ path = "./lib/jackson-annotations-2.21.jar"
 [[platform.java21.dependency]]
 groupId = "com.fasterxml.jackson.core"
 artifactId = "jackson-core"
-version = "2.21"
-path = "./lib/jackson-core-2.21.jar"
+version = "2.21.1"
+path = "./lib/jackson-core-2.21.1.jar"
 
 [[platform.java21.dependency]]
 groupId = "com.fasterxml.jackson.core"
@@ -87,14 +87,14 @@ path = "./lib/jackson-databind-2.21.1.jar"
 [[platform.java21.dependency]]
 groupId = "com.fasterxml.jackson.datatype"
 artifactId = "jackson-datatype-jsr310"
-version = "2.21"
-path = "./lib/jackson-datatype-jsr310-2.21.jar"
+version = "2.21.1"
+path = "./lib/jackson-datatype-jsr310-2.21.1.jar"
 
 [[platform.java21.dependency]]
 groupId = "com.fasterxml.jackson.dataformat"
 artifactId = "jackson-dataformat-xml"
-version = "2.21"
-path = "./lib/jackson-dataformat-xml-2.21.jar"
+version = "2.21.1"
+path = "./lib/jackson-dataformat-xml-2.21.1.jar"
 
 # Netty dependencies
 [[platform.java21.dependency]]
