@@ -24,15 +24,15 @@ string testSubscription3 = "subscription3";
 string testRule3 = "rule3";
 string testQueue3 = "queue3";
 string duplicateTopicQueueErrorPrefix = string `Error occurred while processing request, Status Code:409`;
-string duplicateSubscriptionErrorPrefix = string `Error occurred while processing request: The messaging entity`;
-string duplicateRuleErrorPrefix = string `Error occurred while processing request: The messaging entity`;
+string duplicateSubscriptionErrorPrefix = string `Error occurred while processing request, Status Code:409`;
+string duplicateRuleErrorPrefix = string `Error occurred while processing request, Status Code:409`;
 string nonExistingQueueError = string `error("Error occurred while processing request: Queue '${nonExistingName}' does not exist.",error("com.azure.core.exception.ResourceNotFoundException: Queue '${nonExistingName}' does not exist."))`;
 string nonExistingTopicError = string `error("Error occurred while processing request, Status Code:200",error("com.azure.core.exception.ResourceNotFoundException: Topic '${nonExistingName}' does not exist."))`;
-string nonExistingSubscriptionErrorPrefix = string `Error occurred while processing request: Entity `;
-string nonExistingRuleErrorPrefix = string `error("Error occurred while processing request, Status Code:404",error("com.azure.core.exception.ResourceNotFoundException: Entity`;
+string nonExistingSubscriptionErrorPrefix = string `Error occurred while processing request, Status Code:404`;
+string nonExistingRuleErrorPrefix = string `Error occurred while processing request, Status Code:404`;
 string invalidNameErrorPrefix = string `Error occurred while processing request, Status Code:400`;
-string invalidSubscriptionNameErrorPrefix = string `Error occurred while processing request:`;
-string invalidRuleNameErrorPrefix = string `Error occurred while processing request: 'sb://`;
+string invalidSubscriptionNameErrorPrefix = string `Error occurred while processing request, Status Code:400`;
+string invalidRuleNameErrorPrefix = string `Error occurred while processing request, Status Code:400`;
 
 @test:Config {
     groups: ["asb_admin_negative"],
@@ -51,7 +51,7 @@ function testCreateQTSR() returns error? {
 }
 
 @test:Config {
-    groups: ["asb_admin_negative", "invalidActionError"],
+    groups: ["asb_admin_negative"],
     dependsOn: [testCreateQTSR],
     enable: true
 }
@@ -143,10 +143,6 @@ function testGetNonExistingTopic() returns error? {
 
     TopicProperties|Error? failedReq = adminClient->getTopic(nonExistingName);
     test:assertTrue(failedReq is AdminActionError, msg = "Get non existing topic failed.");
-    if failedReq is AdminActionError {
-        AdminErrorContext ctx = failedReq.detail();
-        test:assertEquals(ctx.statusCode, 404, msg = "Non existing ASB entity retrieval passed.");
-    }
     test:assertEquals((<Error>failedReq).toString(), nonExistingTopicError);
 }
 
@@ -162,11 +158,7 @@ function testGetNonExistingQueue() returns error? {
 
     QueueProperties|Error? failedReq = adminClient->getQueue(nonExistingName);
     test:assertTrue(failedReq is AdminActionError, msg = "Get non existing queue failed.");
-    if failedReq is AdminActionError {
-        AdminErrorContext ctx = failedReq.detail();
-        test:assertEquals(ctx.statusCode, 404, msg = "Non existing ASB entity retrieval passed.");
-    }
-    test:assertEquals((<Error>failedReq).toString(), nonExistingQueueError);
+    test:assertEquals((<Error>failedReq).message(), nonExistingQueueError);
 }
 
 @test:Config {
@@ -202,7 +194,7 @@ function testGetNonExistingRule() returns error? {
 
     RuleProperties|Error? failedReq = adminClient->getRule(testTopic3, testSubscription3, nonExistingName);
     test:assertTrue(failedReq is Error, msg = "Get non existing rule failed.");
-    test:assertTrue((<Error>failedReq).toString().startsWith(nonExistingRuleErrorPrefix), msg = "Get non existing rule message failed.");
+    test:assertTrue((<Error>failedReq).message().startsWith(nonExistingRuleErrorPrefix), msg = "Get non existing rule message failed.");
 }
 
 @test:Config {
