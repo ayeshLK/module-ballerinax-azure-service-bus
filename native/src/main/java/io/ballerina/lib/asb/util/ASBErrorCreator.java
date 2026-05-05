@@ -110,7 +110,7 @@ public class ASBErrorCreator {
         if (isInitError) {
             return ValueCreator.createRecordValue(
                     ModuleUtils.getModule(), "AdminErrorContext",
-                    Map.of("statusCode", CLIENT_INITIALIZATION_ERROR_CODE, "reason", throwable.getMessage())
+                    Map.of("statusCode", CLIENT_INITIALIZATION_ERROR_CODE, "reason", getExpReason(throwable))
             );
         }
 
@@ -119,7 +119,7 @@ public class ASBErrorCreator {
             int statusCode = httpResponse.getStatusCode();
             return ValueCreator.createRecordValue(
                     ModuleUtils.getModule(), "AdminErrorContext",
-                    Map.of("statusCode", statusCode, "reason", httpResponseExp.getMessage())
+                    Map.of("statusCode", statusCode, "reason", getExpReason(httpResponseExp))
             );
         }
 
@@ -133,7 +133,12 @@ public class ASBErrorCreator {
 
         return ValueCreator.createRecordValue(
                 ModuleUtils.getModule(), "AdminErrorContext",
-                Map.of("statusCode", CLIENT_INVOCATION_ERROR_CODE, "reason", throwable.getMessage())
+                Map.of("statusCode", CLIENT_INVOCATION_ERROR_CODE, "reason", getExpReason(throwable))
         );
+    }
+
+    private static String getExpReason(Throwable throwable) {
+        String msg = throwable.getMessage();
+        return msg != null ? msg : throwable.toString();
     }
 }
