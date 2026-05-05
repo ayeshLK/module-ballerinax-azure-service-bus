@@ -23,14 +23,14 @@ string invalidName = "#TEST";
 string testSubscription3 = "subscription3";
 string testRule3 = "rule3";
 string testQueue3 = "queue3";
-string duplicateTopicQueueErrorPrefix = string `Error occurred while processing request: SubCode=40900. Conflict. You're requesting an operation that isn't allowed in the resource's current state. To know more visit https://aka.ms/sbResourceMgrExceptions.`;
+string duplicateTopicQueueErrorPrefix = string `Error occurred while processing request, Status Code:409`;
 string duplicateSubscriptionErrorPrefix = string `Error occurred while processing request: The messaging entity`;
 string duplicateRuleErrorPrefix = string `Error occurred while processing request: The messaging entity`;
 string nonExistingQueueError = string `error("Error occurred while processing request: Queue '${nonExistingName}' does not exist.",error("com.azure.core.exception.ResourceNotFoundException: Queue '${nonExistingName}' does not exist."))`;
 string nonExistingTopicError = string `error("Error occurred while processing request, Status Code:200",error("com.azure.core.exception.ResourceNotFoundException: Topic '${nonExistingName}' does not exist."))`;
 string nonExistingSubscriptionErrorPrefix = string `Error occurred while processing request: Entity `;
 string nonExistingRuleErrorPrefix = string `error("Error occurred while processing request, Status Code:404",error("com.azure.core.exception.ResourceNotFoundException: Entity`;
-string invalidNameErrorPrefix = string `Error occurred while processing request: SubCode=40000.`;
+string invalidNameErrorPrefix = string `Error occurred while processing request, Status Code:400`;
 string invalidSubscriptionNameErrorPrefix = string `Error occurred while processing request:`;
 string invalidRuleNameErrorPrefix = string `Error occurred while processing request: 'sb://`;
 
@@ -51,7 +51,7 @@ function testCreateQTSR() returns error? {
 }
 
 @test:Config {
-    groups: ["asb_admin_negative"],
+    groups: ["asb_admin_negative", "invalidActionError"],
     dependsOn: [testCreateQTSR],
     enable: true
 }
