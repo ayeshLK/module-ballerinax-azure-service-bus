@@ -2,7 +2,7 @@
 distribution = "2201.11.0"
 org = "ballerinax"
 name = "asb"
-version = "@project.version@"
+version = "@toml.version@"
 license= ["Apache-2.0"]
 authors = ["Ballerina"]
 keywords = ["Type/Connector", "Type/Trigger", "Vendor/Microsoft", "Area/Messaging", "IT Operations/Message Brokers", "Cost/Paid"]
@@ -19,7 +19,7 @@ graalvmCompatible = true
 groupId = "org.ballerinax"
 artifactId = "asb-native"
 module = "asb-native" 
-version = "@project.version@"
+version = "@toml.version@"
 path = "../native/build/libs/asb-native-@project.version@.jar"
 
 # Azure dependencies
