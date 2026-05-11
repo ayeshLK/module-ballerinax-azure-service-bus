@@ -5,6 +5,11 @@ This file contains all the notable changes done to the Ballerina WebSub package 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+- [Fix `updateRule` not applying filter and action changes due to incorrect field extraction from nested `SqlRule` record](https://github.com/ballerina-platform/ballerina-library/issues/8730)
+
 ## [3.9.1] - 2024-08-07
 
 #### Fixed
