@@ -500,13 +500,18 @@ public class ASBUtils {
      */
     public static RuleProperties getUpdatedRulePropertiesFromBObject(BMap<BString, Object> ruleConfig,
                                                                      RuleProperties ruleProp) {
-        if (ruleConfig.containsKey(ASBConstants.RECORD_FIELD_ACTION)) {
-            ruleProp.setAction(new SqlRuleAction(
-                    ruleConfig.getStringValue(ASBConstants.RECORD_FIELD_ACTION).getValue()));
-        }
-        if (ruleConfig.containsKey(ASBConstants.RECORD_FIELD_FILTER)) {
-            ruleProp.setFilter(new SqlRuleFilter(
-                    ruleConfig.getStringValue(ASBConstants.RECORD_FIELD_FILTER).getValue()));
+        @SuppressWarnings("unchecked")
+        BMap<BString, Object> sqlRule = (BMap<BString, Object>) ruleConfig.getMapValue(
+                ASBConstants.RECORD_FIELD_SQL_RULE);
+        if (sqlRule != null) {
+            if (sqlRule.containsKey(ASBConstants.RECORD_FIELD_ACTION)) {
+                ruleProp.setAction(new SqlRuleAction(
+                        sqlRule.getStringValue(ASBConstants.RECORD_FIELD_ACTION).getValue()));
+            }
+            if (sqlRule.containsKey(ASBConstants.RECORD_FIELD_FILTER)) {
+                ruleProp.setFilter(new SqlRuleFilter(
+                        sqlRule.getStringValue(ASBConstants.RECORD_FIELD_FILTER).getValue()));
+            }
         }
         return ruleProp;
     }
