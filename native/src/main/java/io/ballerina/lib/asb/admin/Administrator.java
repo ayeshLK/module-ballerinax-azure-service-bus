@@ -20,6 +20,7 @@ package io.ballerina.lib.asb.admin;
 
 import com.azure.core.exception.HttpResponseException;
 import com.azure.core.http.rest.PagedIterable;
+import com.azure.messaging.servicebus.ServiceBusException;
 import com.azure.messaging.servicebus.administration.ServiceBusAdministrationClient;
 import com.azure.messaging.servicebus.administration.ServiceBusAdministrationClientBuilder;
 import com.azure.messaging.servicebus.administration.models.AccessRights;
@@ -34,7 +35,6 @@ import com.azure.messaging.servicebus.administration.models.SqlRuleFilter;
 import com.azure.messaging.servicebus.administration.models.SubscriptionProperties;
 import com.azure.messaging.servicebus.administration.models.TopicProperties;
 import io.ballerina.lib.asb.util.ASBConstants;
-import io.ballerina.lib.asb.util.ASBErrorCreator;
 import io.ballerina.lib.asb.util.ASBUtils;
 import io.ballerina.lib.asb.util.ModuleUtils;
 import io.ballerina.runtime.api.Environment;
@@ -81,9 +81,11 @@ public class Administrator {
             setClient(administratorClient, administratorBuilder.buildClient());
             return null;
         } catch (BError e) {
-            return ASBErrorCreator.fromBError(e);
+            return Utils.fromAsbAdminInitException(e);
+        } catch (ServiceBusException e) {
+            return Utils.fromAsbAdminInitException(e);
         } catch (Exception e) {
-            return ASBErrorCreator.createAdminInitError(e);
+            return Utils.fromAsbAdminInitException(e);
         }
     }
 
@@ -109,9 +111,11 @@ public class Administrator {
                 }
                 return constructTopicCreatedRecord(topicProp);
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -130,9 +134,13 @@ public class Administrator {
                 TopicProperties topicProp = clientEp.getTopic(topicName.toString());
                 return constructTopicCreatedRecord(topicProp);
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (HttpResponseException e) {
+                return Utils.fromASBHttpResponseException(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -155,9 +163,13 @@ public class Administrator {
                         ASBUtils.getUpdatedTopicPropertiesFromBObject(topicProperties, topicProp));
                 return constructTopicCreatedRecord(updatedTopicProps);
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (HttpResponseException e) {
+                return Utils.fromASBHttpResponseException(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -175,9 +187,13 @@ public class Administrator {
                 PagedIterable<TopicProperties> topicProp = clientEp.listTopics();
                 return constructTopicPropertiesArray(topicProp);
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (HttpResponseException e) {
+                return Utils.fromASBHttpResponseException(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -212,9 +228,11 @@ public class Administrator {
                 clientEp.deleteTopic(topicName.toString());
                 return null;
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -232,14 +250,16 @@ public class Administrator {
             try {
                 return clientEp.getTopicExists(topicName.toString());
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
             }  catch (HttpResponseException e) {
                 if (e.getResponse().getStatusCode() == 404) {
                     return false;
                 }
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromASBHttpResponseException(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -268,9 +288,11 @@ public class Administrator {
                 }
                 return constructSubscriptionCreatedRecord(subscriptionProps);
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            }  catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -292,9 +314,11 @@ public class Administrator {
                         subscriptionName.toString());
                 return constructSubscriptionCreatedRecord(subscriptionProps);
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            }  catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -320,9 +344,13 @@ public class Administrator {
                                 subscriptionProperties, subscriptionProps));
                 return constructSubscriptionCreatedRecord(updatedSubscriptionProps);
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (HttpResponseException e) {
+                return Utils.fromASBHttpResponseException(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -342,9 +370,13 @@ public class Administrator {
                         topicName.toString());
                 return constructSubscriptionPropertiesArray(subscriptionProp);
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (HttpResponseException e) {
+                return Utils.fromASBHttpResponseException(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -383,9 +415,11 @@ public class Administrator {
                 clientEp.deleteSubscription(topicName.toString(), subscriptionName.toString());
                 return null;
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -405,14 +439,16 @@ public class Administrator {
             try {
                 return clientEp.getSubscriptionExists(topicName.toString(), subscriptionName.toString());
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
             } catch (HttpResponseException e) {
                 if (e.getResponse().getStatusCode() == 404) {
                     return false;
                 }
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromASBHttpResponseException(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -443,9 +479,11 @@ public class Administrator {
                 }
                 return constructRuleCreatedRecord(ruleProp);
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -468,9 +506,13 @@ public class Administrator {
                         ruleName.toString());
                 return constructRuleCreatedRecord(ruleProp);
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (HttpResponseException e) {
+                return Utils.fromASBHttpResponseException(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -498,9 +540,13 @@ public class Administrator {
                         ASBUtils.getUpdatedRulePropertiesFromBObject(updateRuleProperties, currentRuleProperties));
                 return constructRuleCreatedRecord(updatedRuleProperties);
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (HttpResponseException e) {
+                return Utils.fromASBHttpResponseException(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -523,9 +569,13 @@ public class Administrator {
                 LOGGER.debug("Retrieved all rules successfully");
                 return constructRulePropertiesArray(ruleProp);
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (HttpResponseException e) {
+                return Utils.fromASBHttpResponseException(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -563,9 +613,11 @@ public class Administrator {
                 clientEp.deleteRule(topicName.toString(), subscriptionName.toString(), ruleName.toString());
                 return null;
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -592,9 +644,11 @@ public class Administrator {
                 }
                 return constructQueueCreatedRecord(queueProp);
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -613,9 +667,11 @@ public class Administrator {
                 QueueProperties queueProp = clientEp.getQueue(queueName.toString());
                 return constructQueueCreatedRecord(queueProp);
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -638,9 +694,13 @@ public class Administrator {
                         ASBUtils.getUpdatedQueuePropertiesFromBObject(queueProperties, queueProp));
                 return constructQueueCreatedRecord(updatedQueueProps);
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (HttpResponseException e) {
+                return Utils.fromASBHttpResponseException(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -658,9 +718,13 @@ public class Administrator {
                 PagedIterable<QueueProperties> queueProp = clientEp.listQueues();
                 return constructQueuePropertiesArray(queueProp);
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (HttpResponseException e) {
+                return Utils.fromASBHttpResponseException(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -695,9 +759,11 @@ public class Administrator {
                 clientEp.deleteQueue(queueName.toString());
                 return null;
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
@@ -715,14 +781,16 @@ public class Administrator {
             try {
                 return clientEp.getQueueExists(queueName.toString());
             } catch (BError e) {
-                return ASBErrorCreator.fromBError(e);
+                return Utils.fromBError(e);
             } catch (HttpResponseException e) {
                 if (e.getResponse().getStatusCode() == 404) {
                     return false;
                 }
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromASBHttpResponseException(e);
+            } catch (ServiceBusException e) {
+                return Utils.fromASBException(e);
             } catch (Exception e) {
-                return ASBErrorCreator.createAdminActionError(e);
+                return Utils.fromUnhandledException(e);
             }
         });
     }
