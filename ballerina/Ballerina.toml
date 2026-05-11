@@ -54,12 +54,6 @@ version = "1.0.1"
 path = "./lib/azure-json-1.0.1.jar"
 
 [[platform.java21.dependency]]
-groupId = "com.azure"
-artifactId = "azure-xml"
-version = "1.2.1"
-path = "./lib/azure-xml-1.2.1.jar"
-
-[[platform.java21.dependency]]
 groupId = "com.microsoft.azure"
 artifactId = "qpid-proton-j-extensions"
 version = "1.2.4"
