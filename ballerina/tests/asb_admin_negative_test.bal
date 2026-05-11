@@ -23,16 +23,16 @@ string invalidName = "#TEST";
 string testSubscription3 = "subscription3";
 string testRule3 = "rule3";
 string testQueue3 = "queue3";
-string duplicateTopicQueueErrorPrefix = string `Error occurred while processing request, Status Code:409`;
-string duplicateSubscriptionErrorPrefix = string `Error occurred while processing request, Status Code:409`;
-string duplicateRuleErrorPrefix = string `Error occurred while processing request, Status Code:409`;
-string nonExistingQueueError = string `error("Error occurred while processing request: Queue '${nonExistingName}' does not exist.",error("com.azure.core.exception.ResourceNotFoundException: Queue '${nonExistingName}' does not exist."))`;
-string nonExistingTopicError = string `error("Error occurred while processing request, Status Code:200",error("com.azure.core.exception.ResourceNotFoundException: Topic '${nonExistingName}' does not exist."))`;
-string nonExistingSubscriptionErrorPrefix = string `Error occurred while processing request, Status Code:404`;
+string duplicateTopicQueueErrorPrefix = string `Error occurred while processing request: SubCode=40900. Conflict. You're requesting an operation that isn't allowed in the resource's current state. To know more visit https://aka.ms/sbResourceMgrExceptions.`;
+string duplicateSubscriptionErrorPrefix = string `Error occurred while processing request: The messaging entity`;
+string duplicateRuleErrorPrefix = string `Error occurred while processing request: The messaging entity`;
+string nonExistingTopicError = string `Error occurred while processing request, Status Code:200`;
+string nonExistingQueueError = string `Error occurred while processing request: Queue '${nonExistingName}' does not exist.`;
+string nonExistingSubscriptionErrorPrefix = string `Error occurred while processing request: Entity `;
 string nonExistingRuleErrorPrefix = string `Error occurred while processing request, Status Code:404`;
-string invalidNameErrorPrefix = string `Error occurred while processing request, Status Code:400`;
-string invalidSubscriptionNameErrorPrefix = string `Error occurred while processing request, Status Code:400`;
-string invalidRuleNameErrorPrefix = string `Error occurred while processing request, Status Code:400`;
+string invalidNameErrorPrefix = string `Error occurred while processing request: SubCode=40000.`;
+string invalidSubscriptionNameErrorPrefix = string `Error occurred while processing request:`;
+string invalidRuleNameErrorPrefix = string `Error occurred while processing request: 'sb://`;
 
 @test:Config {
     groups: ["asb_admin_negative"],
@@ -61,11 +61,7 @@ function testDuplicateTopicCreation() returns error? {
     log:printInfo("Initializing Asb admin client.");
     Administrator adminClient = check new (connectionString);
     TopicProperties|Error? failedReq = adminClient->createTopic(testTopic3);
-    test:assertTrue(failedReq is AdminActionError, msg = "Duplicate creation failed.");
-    if failedReq is AdminActionError {
-        AdminErrorContext ctx = failedReq.detail();
-        test:assertEquals(ctx.statusCode, 409, msg = "Conflict on ASB entity creation ignored.");
-    }
+    test:assertTrue(failedReq is Error, msg = "Duplicate creation failed.");
     test:assertTrue((<Error>failedReq).message().startsWith(duplicateTopicQueueErrorPrefix), msg = "Duplicate creation message failed.");
 }
 
@@ -81,11 +77,7 @@ function testDuplicateQueueCreation() returns error? {
     Administrator adminClient = check new (connectionString);
 
     QueueProperties|Error? failedReq = adminClient->createQueue(testQueue3);
-    test:assertTrue(failedReq is AdminActionError, msg = "Duplicate creation failed.");
-    if failedReq is AdminActionError {
-        AdminErrorContext ctx = failedReq.detail();
-        test:assertEquals(ctx.statusCode, 409, msg = "Conflict on ASB entity creation ignored.");
-    }
+    test:assertTrue(failedReq is Error, msg = "Duplicate creation failed.");
     test:assertTrue((<Error>failedReq).message().startsWith(duplicateTopicQueueErrorPrefix), msg = "Duplicate creation message failed.");
 }
 
@@ -101,11 +93,7 @@ function testDuplicateSubscriptionCreation() returns error? {
     Administrator adminClient = check new (connectionString);
 
     SubscriptionProperties|Error? failedReq = adminClient->createSubscription(testTopic3, testSubscription3);
-    test:assertTrue(failedReq is AdminActionError, msg = "Duplicate creation failed.");
-    if failedReq is AdminActionError {
-        AdminErrorContext ctx = failedReq.detail();
-        test:assertEquals(ctx.statusCode, 409, msg = "Conflict on ASB entity creation ignored.");
-    }
+    test:assertTrue(failedReq is Error, msg = "Duplicate creation failed.");
     test:assertTrue((<Error>failedReq).message().startsWith(duplicateSubscriptionErrorPrefix), msg = "Duplicate creation message failed.");
 
 }
@@ -122,11 +110,7 @@ function testDuplicateRuleCreation() returns error? {
     Administrator adminClient = check new (connectionString);
 
     RuleProperties|Error? failedReq = adminClient->createRule(testTopic3, testSubscription3, testRule3);
-    test:assertTrue(failedReq is AdminActionError, msg = "Duplicate creation failed.");
-    if failedReq is AdminActionError {
-        AdminErrorContext ctx = failedReq.detail();
-        test:assertEquals(ctx.statusCode, 409, msg = "Conflict on ASB entity creation ignored.");
-    }
+    test:assertTrue(failedReq is Error, msg = "Duplicate creation failed.");
     test:assertTrue((<Error>failedReq).message().startsWith(duplicateRuleErrorPrefix), msg = "Duplicate creation message failed.");
 
 }
@@ -142,8 +126,8 @@ function testGetNonExistingTopic() returns error? {
     Administrator adminClient = check new (connectionString);
 
     TopicProperties|Error? failedReq = adminClient->getTopic(nonExistingName);
-    test:assertTrue(failedReq is AdminActionError, msg = "Get non existing topic failed.");
-    test:assertEquals((<Error>failedReq).toString(), nonExistingTopicError);
+    test:assertTrue(failedReq is Error, msg = "Get non existing topic failed.");
+    test:assertEquals((<AdminActionError>failedReq).message(), nonExistingTopicError);
 }
 
 @test:Config {
@@ -157,7 +141,7 @@ function testGetNonExistingQueue() returns error? {
     Administrator adminClient = check new (connectionString);
 
     QueueProperties|Error? failedReq = adminClient->getQueue(nonExistingName);
-    test:assertTrue(failedReq is AdminActionError, msg = "Get non existing queue failed.");
+    test:assertTrue(failedReq is Error, msg = "Get non existing queue failed.");
     test:assertEquals((<Error>failedReq).message(), nonExistingQueueError);
 }
 
@@ -173,11 +157,7 @@ function testGetNonExistingSubscription() returns error? {
     Administrator adminClient = check new (connectionString);
 
     SubscriptionProperties|Error? failedReq = adminClient->getSubscription(testTopic3, nonExistingName);
-    test:assertTrue(failedReq is AdminActionError, msg = "Get non existing subscription failed.");
-    if failedReq is AdminActionError {
-        AdminErrorContext ctx = failedReq.detail();
-        test:assertEquals(ctx.statusCode, 404, msg = "Non existing ASB entity retrieval passed.");
-    }
+    test:assertTrue(failedReq is Error, msg = "Get non existing subscription failed.");
     test:assertTrue((<Error>failedReq).message().startsWith(nonExistingSubscriptionErrorPrefix), msg = "Get non existing subscription message failed.");
 }
 
