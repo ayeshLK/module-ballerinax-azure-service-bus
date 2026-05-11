@@ -18,8 +18,8 @@ graalvmCompatible = true
 [[platform.java21.dependency]]
 groupId = "org.ballerinax"
 artifactId = "asb-native"
-module = "asb-native"
-version = "3.9.2-SNAPSHOT"
+module = "asb-native" 
+version = "3.9.2"
 path = "../native/build/libs/asb-native-3.9.2-SNAPSHOT.jar"
 
 # Azure dependencies
