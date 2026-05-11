@@ -22,7 +22,6 @@ import com.azure.core.exception.HttpResponseException;
 import com.azure.core.http.HttpResponse;
 import com.azure.messaging.servicebus.ServiceBusException;
 import io.ballerina.lib.asb.util.ModuleUtils;
-import io.ballerina.runtime.api.creators.ErrorCreator;
 import io.ballerina.runtime.api.creators.ValueCreator;
 import io.ballerina.runtime.api.utils.StringUtils;
 import io.ballerina.runtime.api.values.BError;
@@ -31,7 +30,14 @@ import io.ballerina.runtime.api.values.BString;
 
 import java.util.Map;
 
-public final class Utils {
+import static io.ballerina.runtime.api.creators.ErrorCreator.createError;
+
+/**
+ * Helper class to create Ballerina errors for administrator actions.
+ *
+ * @since 3.10.0
+ */
+public final class ErrorCreator {
     private static final String ASB_ERROR_PREFIX = "ASB Error: ";
     private static final String ASB_HTTP_ERROR_PREFIX = "Error occurred while processing request, Status Code:";
     private static final String UNHANDLED_ERROR_PREFIX = "Error occurred while processing request: ";
@@ -39,7 +45,7 @@ public final class Utils {
     private static final int CLIENT_INITIALIZATION_ERROR_CODE = 10000;
     private static final int CLIENT_INVOCATION_ERROR_CODE = 10001;
 
-    private Utils() {}
+    private ErrorCreator() {}
 
     // Admin init errors
     public static BError fromAsbAdminInitException(BError error) {
@@ -63,7 +69,7 @@ public final class Utils {
     public static BError fromASBHttpResponseException(HttpResponseException e) {
         BMap<BString, Object> errorDetails = getAdminErrorDetails(e, false);
         return fromBError(ASB_HTTP_ERROR_PREFIX + e.getResponse().getStatusCode(),
-                ErrorCreator.createError(e.fillInStackTrace()), errorDetails);
+                createError(e.fillInStackTrace()), errorDetails);
     }
 
     public static BError fromUnhandledException(Exception e) {
@@ -77,11 +83,11 @@ public final class Utils {
 
     private static BError fromJavaException(String message, Throwable cause, boolean isInit) {
         BMap<BString, Object> errorDetails = getAdminErrorDetails(cause, isInit);
-        return fromBError(message, ErrorCreator.createError(cause), errorDetails);
+        return fromBError(message, createError(cause), errorDetails);
     }
 
     private static BError fromBError(String message, BError cause, BMap<BString, Object> errorDetails) {
-        return ErrorCreator.createError(
+        return createError(
                 ModuleUtils.getModule(), ASB_ADMIN_ERROR, StringUtils.fromString(message), cause, errorDetails);
     }
 

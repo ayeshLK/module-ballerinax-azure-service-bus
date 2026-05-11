@@ -81,11 +81,11 @@ public class Administrator {
             setClient(administratorClient, administratorBuilder.buildClient());
             return null;
         } catch (BError e) {
-            return Utils.fromAsbAdminInitException(e);
+            return ErrorCreator.fromAsbAdminInitException(e);
         } catch (ServiceBusException e) {
-            return Utils.fromAsbAdminInitException(e);
+            return ErrorCreator.fromAsbAdminInitException(e);
         } catch (Exception e) {
-            return Utils.fromAsbAdminInitException(e);
+            return ErrorCreator.fromAsbAdminInitException(e);
         }
     }
 
@@ -111,11 +111,11 @@ public class Administrator {
                 }
                 return constructTopicCreatedRecord(topicProp);
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -134,13 +134,13 @@ public class Administrator {
                 TopicProperties topicProp = clientEp.getTopic(topicName.toString());
                 return constructTopicCreatedRecord(topicProp);
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (HttpResponseException e) {
-                return Utils.fromASBHttpResponseException(e);
+                return ErrorCreator.fromASBHttpResponseException(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -163,13 +163,13 @@ public class Administrator {
                         ASBUtils.getUpdatedTopicPropertiesFromBObject(topicProperties, topicProp));
                 return constructTopicCreatedRecord(updatedTopicProps);
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (HttpResponseException e) {
-                return Utils.fromASBHttpResponseException(e);
+                return ErrorCreator.fromASBHttpResponseException(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -187,13 +187,13 @@ public class Administrator {
                 PagedIterable<TopicProperties> topicProp = clientEp.listTopics();
                 return constructTopicPropertiesArray(topicProp);
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (HttpResponseException e) {
-                return Utils.fromASBHttpResponseException(e);
+                return ErrorCreator.fromASBHttpResponseException(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -228,11 +228,11 @@ public class Administrator {
                 clientEp.deleteTopic(topicName.toString());
                 return null;
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -250,16 +250,16 @@ public class Administrator {
             try {
                 return clientEp.getTopicExists(topicName.toString());
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             }  catch (HttpResponseException e) {
                 if (e.getResponse().getStatusCode() == 404) {
                     return false;
                 }
-                return Utils.fromASBHttpResponseException(e);
+                return ErrorCreator.fromASBHttpResponseException(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -288,11 +288,11 @@ public class Administrator {
                 }
                 return constructSubscriptionCreatedRecord(subscriptionProps);
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             }  catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -314,11 +314,11 @@ public class Administrator {
                         subscriptionName.toString());
                 return constructSubscriptionCreatedRecord(subscriptionProps);
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             }  catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -344,13 +344,13 @@ public class Administrator {
                                 subscriptionProperties, subscriptionProps));
                 return constructSubscriptionCreatedRecord(updatedSubscriptionProps);
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (HttpResponseException e) {
-                return Utils.fromASBHttpResponseException(e);
+                return ErrorCreator.fromASBHttpResponseException(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -370,13 +370,13 @@ public class Administrator {
                         topicName.toString());
                 return constructSubscriptionPropertiesArray(subscriptionProp);
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (HttpResponseException e) {
-                return Utils.fromASBHttpResponseException(e);
+                return ErrorCreator.fromASBHttpResponseException(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -415,11 +415,11 @@ public class Administrator {
                 clientEp.deleteSubscription(topicName.toString(), subscriptionName.toString());
                 return null;
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -439,16 +439,16 @@ public class Administrator {
             try {
                 return clientEp.getSubscriptionExists(topicName.toString(), subscriptionName.toString());
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (HttpResponseException e) {
                 if (e.getResponse().getStatusCode() == 404) {
                     return false;
                 }
-                return Utils.fromASBHttpResponseException(e);
+                return ErrorCreator.fromASBHttpResponseException(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -479,11 +479,11 @@ public class Administrator {
                 }
                 return constructRuleCreatedRecord(ruleProp);
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -506,13 +506,13 @@ public class Administrator {
                         ruleName.toString());
                 return constructRuleCreatedRecord(ruleProp);
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (HttpResponseException e) {
-                return Utils.fromASBHttpResponseException(e);
+                return ErrorCreator.fromASBHttpResponseException(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -540,13 +540,13 @@ public class Administrator {
                         ASBUtils.getUpdatedRulePropertiesFromBObject(updateRuleProperties, currentRuleProperties));
                 return constructRuleCreatedRecord(updatedRuleProperties);
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (HttpResponseException e) {
-                return Utils.fromASBHttpResponseException(e);
+                return ErrorCreator.fromASBHttpResponseException(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -569,13 +569,13 @@ public class Administrator {
                 LOGGER.debug("Retrieved all rules successfully");
                 return constructRulePropertiesArray(ruleProp);
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (HttpResponseException e) {
-                return Utils.fromASBHttpResponseException(e);
+                return ErrorCreator.fromASBHttpResponseException(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -613,11 +613,11 @@ public class Administrator {
                 clientEp.deleteRule(topicName.toString(), subscriptionName.toString(), ruleName.toString());
                 return null;
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -644,11 +644,11 @@ public class Administrator {
                 }
                 return constructQueueCreatedRecord(queueProp);
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -667,11 +667,11 @@ public class Administrator {
                 QueueProperties queueProp = clientEp.getQueue(queueName.toString());
                 return constructQueueCreatedRecord(queueProp);
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -694,13 +694,13 @@ public class Administrator {
                         ASBUtils.getUpdatedQueuePropertiesFromBObject(queueProperties, queueProp));
                 return constructQueueCreatedRecord(updatedQueueProps);
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (HttpResponseException e) {
-                return Utils.fromASBHttpResponseException(e);
+                return ErrorCreator.fromASBHttpResponseException(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -718,13 +718,13 @@ public class Administrator {
                 PagedIterable<QueueProperties> queueProp = clientEp.listQueues();
                 return constructQueuePropertiesArray(queueProp);
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (HttpResponseException e) {
-                return Utils.fromASBHttpResponseException(e);
+                return ErrorCreator.fromASBHttpResponseException(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -759,11 +759,11 @@ public class Administrator {
                 clientEp.deleteQueue(queueName.toString());
                 return null;
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
@@ -781,16 +781,16 @@ public class Administrator {
             try {
                 return clientEp.getQueueExists(queueName.toString());
             } catch (BError e) {
-                return Utils.fromBError(e);
+                return ErrorCreator.fromBError(e);
             } catch (HttpResponseException e) {
                 if (e.getResponse().getStatusCode() == 404) {
                     return false;
                 }
-                return Utils.fromASBHttpResponseException(e);
+                return ErrorCreator.fromASBHttpResponseException(e);
             } catch (ServiceBusException e) {
-                return Utils.fromASBException(e);
+                return ErrorCreator.fromASBException(e);
             } catch (Exception e) {
-                return Utils.fromUnhandledException(e);
+                return ErrorCreator.fromUnhandledException(e);
             }
         });
     }
