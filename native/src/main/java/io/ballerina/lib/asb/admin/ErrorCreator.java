@@ -54,7 +54,8 @@ public final class ErrorCreator {
     }
 
     public static BError fromAsbAdminInitException(ServiceBusException e) {
-        return fromJavaException(ASB_ERROR_PREFIX + e.getReason().toString(), e, true);
+        String reason = e.getReason() != null ? e.getReason().toString() : "Unknown reason";
+        return fromJavaException(ASB_ERROR_PREFIX + reason, e, true);
     }
 
     public static BError fromAsbAdminInitException(Exception e) {
@@ -63,7 +64,8 @@ public final class ErrorCreator {
 
     // Admin action errors
     public static BError fromASBException(ServiceBusException e) {
-        return fromJavaException(ASB_ERROR_PREFIX + e.getReason().toString(), e, false);
+        String reason = e.getReason() != null ? e.getReason().toString() : "Unknown reason";
+        return fromJavaException(ASB_ERROR_PREFIX + reason, e, false);
     }
 
     public static BError fromASBHttpResponseException(HttpResponseException e) {
